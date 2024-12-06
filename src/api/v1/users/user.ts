@@ -7,4 +7,15 @@ app.get('/', (c) => {
 })
 
 
+
+
+// Example
+app.post('/test', async(c) => {
+
+    const {text} = await c.req.json();
+
+    return c.json({newtext: text},200)
+  })
+
+
 export default app;
