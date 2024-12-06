@@ -6,9 +6,11 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
+    "bcryptjs": "^2.4.3",
     "hono": "^4.6.12"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.17",
     "tsx": "^4.7.1"
   }
