@@ -1,16 +1,16 @@
 import { Hono } from 'hono'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken';
 
 import { db } from '$db'
 import * as table from '$schema';
-import { eq, or, sql } from 'drizzle-orm';
+import { eq, is, or, sql } from 'drizzle-orm';
 const app = new Hono()
 
-const user: string = "tony"
-const pass: string = "$2a$10$HWlro/jvsB23bWzbLKYarOZN2fVzGcPzZekongL.oGiOiuwMl/BxG"
+const JWT_SECRET = 'secret';
 
 app.post('/register', async (c) => {
-    const { username,fullname, email, password, confirmpassword } = await c.req.json();
+    const { username, fullname, email, password, confirmpassword } = await c.req.json();
 
     const hashedPassword = bcrypt.hashSync(password, 10)
 
@@ -53,25 +53,90 @@ app.post('/register', async (c) => {
 
 });
 
+
 app.post('/login', async (c) => {
     const { username, password } = await c.req.json()
-    const hashedPassword = bcrypt.compareSync(password, pass)
 
     const result = await db
         .select()
         .from(table.users)
         .where(
-            sql`${table.users.username} = ${username} OR ${table.users.password} = ${hashedPassword}`
+            sql`${table.users.username} = ${username}`
         );
 
-        console.log(result.length)
-    if(result.length<1){
-        return c.json({message: "User not found!"},401)
-    }else{
-        return c.json({message: "Login successfully!"},200)
+    console.log()
+    if (result.length < 1) {
+        return c.json({ message: "User not found!" }, 401)
     }
+    const user = result[0];
+    if (!user.password) {
+        return c.json({ message: "User not found!!" }, 400);
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+
+    if (!isPasswordValid) {
+        return c.json({ message: "User not found!!" }, 400);
+    }
+
+    const token = jwt.sign(
+        { userId: user.id, username: user.username },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+    );
+
+    return c.json({ message: "Login successfully!", token }, 200);
 
 })
 
+// Middleware เพื่อตรวจสอบ Token
+const verifyToken = (c: any) => {
+    const authHeader = c.req.headers.get('Authorization')
+    if (!authHeader) {
+        return c.json({ message: 'No token provided' }, 401)
+    }
+
+    const token = authHeader.split(' ')[1]
+
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET) // ตรวจสอบ JWT Token
+        c.set('user', decoded)  // เก็บข้อมูลผู้ใช้ที่ถูก decode ใน context ของ Hono
+        return true
+    } catch (error) {
+        return c.json({ message: 'Invalid token' }, 403)
+    }
+}
+
+// /home endpoint ที่ต้องการการยืนยันตัวตน
+app.get('/verify', async (c) => {
+    const authHeader = c.req.header('Authorization')
+    const token = authHeader?.split(' ')[1];
+
+    if (!token) {
+        return c.json({ message: 'Token is missing' }, 401)
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET)
+    
+        if (typeof decoded !== 'string' && 'userId' in decoded && 'username' in decoded) {
+            // console.log(decoded)
+            // return c.json({ userId: decoded.userId, username: decoded.username }) 
+            const userData = await db.select().from(table.users).where(eq(table.users.id, decoded.userId))
+            console.log(userData)
+            return c.json({
+                id: userData[0].id,
+                username: userData[0].username,
+                fullname: userData[0].fullname,
+
+            },200)
+        } else {
+            return c.json({ message: 'Invalid token' }, 403)
+        }
+    } catch (error) {
+        return c.json({ message: 'Invalid token' }, 403)
+    }
+    
+});
 
 export default app;
