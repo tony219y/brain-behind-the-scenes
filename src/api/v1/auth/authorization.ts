@@ -10,7 +10,7 @@ const user: string = "tony"
 const pass: string = "$2a$10$HWlro/jvsB23bWzbLKYarOZN2fVzGcPzZekongL.oGiOiuwMl/BxG"
 
 app.post('/register', async (c) => {
-    const { username, email, password, confirmpassword } = await c.req.json();
+    const { username,fullname, email, password, confirmpassword } = await c.req.json();
 
     const hashedPassword = bcrypt.hashSync(password, 10)
 
@@ -39,6 +39,7 @@ app.post('/register', async (c) => {
     try {
         const res = await db.insert(table.users).values({
             username: username,
+            fullname: fullname,
             email: email,
             password: hashedPassword
         })

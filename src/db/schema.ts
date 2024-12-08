@@ -13,6 +13,7 @@ import {
 export const users = pgTable("Users", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 255 }),
+  fullname: varchar("fullname", { length: 255 }),
   email: varchar("email", { length: 255 }),
   password: text("password"),
   created_at: timestamp("created_at").defaultNow(),
