@@ -2,16 +2,23 @@
   "name": "brain-behind-the-scenes",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "db push": "npx drizzle-kit push "
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "bcryptjs": "^2.4.3",
-    "hono": "^4.6.12"
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.37.0",
+    "hono": "^4.6.12",
+    "pg": "^8.13.1",
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.17",
-    "tsx": "^4.7.1"
+    "@types/pg": "^8.11.10",
+    "drizzle-kit": "^0.29.1",
+    "tsx": "^4.19.2"
   }
 }

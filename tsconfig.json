@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
+    "module": "NodeNext",          // ใช้ NodeNext เพื่อรองรับการใช้ ES Modules
+    "moduleResolution": "NodeNext", // ตั้งค่า moduleResolution เป็น NodeNext
     "strict": true,
+    "paths": {
+      "$db": ["./src/db/index.ts"],
+      "$schema": ["./src/db/schema.ts"]
+    },
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
+    "types": ["node"],
+    "jsx": "react-jsx",            // ถ้าใช้ React (ในกรณีนี้ Svelte จะไม่ใช้ jsx)
+    "jsxImportSource": "hono/jsx"  // ใช้ถ้าใช้ JSX กับ Hono
   }
 }

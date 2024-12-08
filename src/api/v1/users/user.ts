@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
+import { db } from '$db'
+import { usersTable } from '$schema'
 const app = new Hono()
-
 
 app.get('/', (c) => {
     return c.text('Hello edit!')
@@ -10,11 +11,12 @@ app.get('/', (c) => {
 
 
 // Example
-app.post('/test', async(c) => {
+app.get('/test', async(c) => {
 
-    const {text} = await c.req.json();
-
-    return c.json({newtext: text},200)
+    // const {text} = await c.req.json();
+    const result = await db.select().from(usersTable)
+    console.log(result);
+    return c.json({result},200)
 })
 
 app.post('/createPortfolio', async(c) => {
