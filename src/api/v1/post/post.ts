@@ -36,10 +36,11 @@ app.get('/get-post', async(c)=>{
     const response = await db.select({
         id: table.posts.id,
         user_id: table.posts.user_id,
-        fullname: table.users.fullname,  // ดึงชื่อเต็มจากตาราง Users
+        username: table.users.username,
+        fullname: table.users.fullname,
         title: table.posts.title,
         content: table.posts.content,
-        post_type_name: table.postType.name,  // ดึงชื่อประเภทโพสต์จาก PostType
+        post_type_name: table.postType.name, 
         post_tag_name: table.postTag.name,    // ดึงชื่อแท็กจาก PostTag
         like_count: table.posts.like_count,
         is_visible: table.posts.is_visible,

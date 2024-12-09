@@ -75,7 +75,7 @@ export const attachments = pgTable("Attachment", {
   file_name: varchar("file_name", { length: 255 }),
   file_path: varchar("file_path", { length: 255 }),
   file_type: varchar("file_type", { length: 50 }),
-  file_size: bigint({mode: 'bigint'}), // Use bigint for file size
+  file_size: bigint({mode: 'bigint'}), 
   user_id: integer("user_id").references(() => users.id), // Foreign Key to Users
   post_id: integer("post_id").references(() => posts.id), // Foreign Key to Posts
   comment_id: integer("comment_id").references(() => comments.id), // Foreign Key to Comments
