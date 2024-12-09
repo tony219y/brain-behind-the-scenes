@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 import { db } from '$db'
 import * as table from '$schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
+import { format } from 'date-fns';
 
 const app = new Hono();
 
@@ -41,7 +42,8 @@ app.get('/get-post', async(c)=>{
         post_type_name: table.postType.name,  // ดึงชื่อประเภทโพสต์จาก PostType
         post_tag_name: table.postTag.name,    // ดึงชื่อแท็กจาก PostTag
         like_count: table.posts.like_count,
-        is_visible: table.posts.is_visible
+        is_visible: table.posts.is_visible,
+        created_at: sql`TO_CHAR(${table.posts.created_at} + INTERVAL '7 hours', 'DD Mon YYYY HH24:MI')`.as('created_at')
       })
       .from(table.posts)
       .innerJoin(table.postType, eq(table.posts.post_type_id, table.postType.id))  // join กับ PostType
