@@ -99,15 +99,14 @@ const verifyToken = (c: any) => {
 
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET) // ตรวจสอบ JWT Token
-        c.set('user', decoded)  // เก็บข้อมูลผู้ใช้ที่ถูก decode ใน context ของ Hono
+        const decoded = jwt.verify(token, JWT_SECRET)
+        c.set('user', decoded)
         return true
     } catch (error) {
         return c.json({ message: 'Invalid token' }, 403)
     }
 }
 
-// /home endpoint ที่ต้องการการยืนยันตัวตน
 app.get('/verify', async (c) => {
     const authHeader = c.req.header('Authorization')
     const token = authHeader?.split(' ')[1];
@@ -118,25 +117,22 @@ app.get('/verify', async (c) => {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET)
-    
+
         if (typeof decoded !== 'string' && 'userId' in decoded && 'username' in decoded) {
-            // console.log(decoded)
-            // return c.json({ userId: decoded.userId, username: decoded.username }) 
             const userData = await db.select().from(table.users).where(eq(table.users.id, decoded.userId))
-            console.log(userData)
             return c.json({
                 id: userData[0].id,
                 username: userData[0].username,
                 fullname: userData[0].fullname,
 
-            },200)
+            }, 200)
         } else {
             return c.json({ message: 'Invalid token' }, 403)
         }
     } catch (error) {
         return c.json({ message: 'Invalid token' }, 403)
     }
-    
+
 });
 
 export default app;
