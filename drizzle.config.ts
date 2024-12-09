@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import 'dotenv/config'; // โหลด environment variables จาก .env
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({

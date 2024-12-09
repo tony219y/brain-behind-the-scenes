@@ -24,7 +24,7 @@ export const users = pgTable("Users", {
 // UserThirdParty table
 export const userThirdParty = pgTable("UserThirdParty", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => users.id),
+  user_id: integer("user_id").references(() => users.id), // Foreign Key to Users
   provider: varchar("provider", { length: 50 }),
   provider_user_id: varchar("provider_user_id", { length: 255 }),
   access_token: text("access_token"),
@@ -36,11 +36,11 @@ export const userThirdParty = pgTable("UserThirdParty", {
 // Post table
 export const posts = pgTable("Post", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => users.id),
+  user_id: integer("user_id").references(() => users.id), // Foreign Key to Users
   title: varchar("title", { length: 255 }),
   content: text("content"),
-  post_type_id: integer("post_type_id"),
-  post_tag_id: integer("post_tag_id"),
+  post_type_id: integer("post_type_id").references(() => postType.id), // Foreign Key to PostType
+  post_tag_id: integer("post_tag_id").references(() => postTag.id), // Foreign Key to PostTag
   like_count: integer("like_count").default(0),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
@@ -50,20 +50,20 @@ export const posts = pgTable("Post", {
 // PostType table
 export const postType = pgTable("PostType", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 10 }),
+  name: varchar("name", { length: 25 }),
 });
 
 // PostTag table
 export const postTag = pgTable("PostTag", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 10 }),
+  name: varchar("name", { length: 25 }),
 });
 
 // Comment table
 export const comments = pgTable("Comment", {
   id: serial("id").primaryKey(),
-  post_id: integer("post_id").references(() => posts.id),
-  user_id: integer("user_id").references(() => users.id),
+  post_id: integer("post_id").references(() => posts.id), // Foreign Key to Posts
+  user_id: integer("user_id").references(() => users.id), // Foreign Key to Users
   content: text("content"),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
@@ -75,11 +75,11 @@ export const attachments = pgTable("Attachment", {
   file_name: varchar("file_name", { length: 255 }),
   file_path: varchar("file_path", { length: 255 }),
   file_type: varchar("file_type", { length: 50 }),
-  file_size: bigint({ mode: 'bigint' }),
-  user_id: integer("user_id").references(() => users.id),
-  post_id: integer("post_id").references(() => posts.id),
-  comment_id: integer("comment_id").references(() => comments.id),
-  message_id: integer("message_id"),
+  file_size: bigint({mode: 'bigint'}), // Use bigint for file size
+  user_id: integer("user_id").references(() => users.id), // Foreign Key to Users
+  post_id: integer("post_id").references(() => posts.id), // Foreign Key to Posts
+  comment_id: integer("comment_id").references(() => comments.id), // Foreign Key to Comments
+  message_id: integer("message_id").references(() => messages.id), // Foreign Key to Messages
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
 });
@@ -87,10 +87,10 @@ export const attachments = pgTable("Attachment", {
 // PostOfferApply table
 export const postOfferApply = pgTable("PostOfferApply", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => users.id),
-  post_id: integer("post_id").references(() => posts.id),
+  user_id: integer("user_id").references(() => users.id), // Foreign Key to Users
+  post_id: integer("post_id").references(() => posts.id), // Foreign Key to Posts
   action_type: varchar("action_type", { length: 50 }),
-  attach_id: integer("attach_id").references(() => attachments.id),
+  attach_id: integer("attach_id").references(() => attachments.id), // Foreign Key to Attachments
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
 });
@@ -99,7 +99,7 @@ export const postOfferApply = pgTable("PostOfferApply", {
 export const messages = pgTable("Message", {
   id: serial("id").primaryKey(),
   chat_id: integer("chat_id"),
-  sender_id: integer("sender_id").references(() => users.id),
+  sender_id: integer("sender_id").references(() => users.id), // Foreign Key to Users
   content: text("content"),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
@@ -108,8 +108,8 @@ export const messages = pgTable("Message", {
 // Chat table
 export const chats = pgTable("Chat", {
   id: serial("id").primaryKey(),
-  user1_id: integer("user1_id").references(() => users.id),
-  user2_id: integer("user2_id").references(() => users.id),
+  user1_id: integer("user1_id").references(() => users.id), // Foreign Key to Users
+  user2_id: integer("user2_id").references(() => users.id), // Foreign Key to Users
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
 });

@@ -88,24 +88,6 @@ app.post('/login', async (c) => {
 
 })
 
-// Middleware เพื่อตรวจสอบ Token
-const verifyToken = (c: any) => {
-    const authHeader = c.req.headers.get('Authorization')
-    if (!authHeader) {
-        return c.json({ message: 'No token provided' }, 401)
-    }
-
-    const token = authHeader.split(' ')[1]
-
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET)
-        c.set('user', decoded)
-        return true
-    } catch (error) {
-        return c.json({ message: 'Invalid token' }, 403)
-    }
-}
 
 app.get('/verify', async (c) => {
     const authHeader = c.req.header('Authorization')
