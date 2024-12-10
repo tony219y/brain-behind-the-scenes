@@ -15,6 +15,11 @@ export const users = pgTable("Users", {
   username: varchar("username", { length: 255 }),
   fullname: varchar("fullname", { length: 255 }),
   email: varchar("email", { length: 255 }),
+  skill: varchar("skill", { length: 255 }),
+  education: varchar("education", { length: 255 }),
+  facebook: varchar("facebook", { length: 255 }),
+  github: varchar("github", { length: 255 }),
+  x: varchar("x", { length: 255 }),
   password: text("password"),
   skill: varchar("skill", { length: 255 }),
   education : varchar("education", {length: 255}),
@@ -53,6 +58,16 @@ export const posts = pgTable("Post", {
   is_visible: boolean("is_visible").default(true),
 });
 
+export const portfolio = pgTable("Portfolio", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").references(() => users.id),
+  title: varchar("title", { length: 255 }),
+  content: text("content"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
+  is_visible: boolean("is_visible").default(true),
+});
+
 // PostType table
 export const postType = pgTable("PostType", {
   id: serial("id").primaryKey(),
@@ -86,6 +101,7 @@ export const attachments = pgTable("Attachment", {
   post_id: integer("post_id").references(() => posts.id), // Foreign Key to Posts
   comment_id: integer("comment_id").references(() => comments.id), // Foreign Key to Comments
   message_id: integer("message_id").references(() => messages.id), // Foreign Key to Messages
+  portfolio_id: integer("portfolio_id").references(() => portfolio.id), // Foreign Key to Messages
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
 });
