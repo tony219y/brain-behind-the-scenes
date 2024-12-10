@@ -16,6 +16,11 @@ export const users = pgTable("Users", {
   fullname: varchar("fullname", { length: 255 }),
   email: varchar("email", { length: 255 }),
   password: text("password"),
+  skill: varchar("skill", { length: 255 }),
+  education : varchar("education", {length: 255}),
+  facebook : varchar("facebook", {length : 64}),
+  github : varchar("github", {length : 64}),
+  x : varchar("x", {length:255}),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().$onUpdateFn(() => new Date()),
   is_active: boolean("is_active").default(true),
@@ -31,6 +36,7 @@ export const userThirdParty = pgTable("UserThirdParty", {
   refresh_token: text("refresh_token"),
   expires_at: timestamp("expires_at"),
   created_at: timestamp("created_at").defaultNow(),
+  skill : varchar("skill", {length : 255})
 });
 
 // Post table

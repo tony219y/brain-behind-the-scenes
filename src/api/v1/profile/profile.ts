@@ -18,7 +18,12 @@ app.get('/:username', async (c) => {
     const response = await db.select({
         id: table.users.id,
         fullname: table.users.fullname,
-        username: table.users.username
+        username: table.users.username,
+        skill: table.users.skill,
+        education: table.users.education,
+        facebook: table.users.facebook,
+        github: table.users.github,
+        x: table.users.x
     })
         .from(table.users)
         .where(eq(table.users.username, username));
@@ -31,6 +36,11 @@ app.get('/:username', async (c) => {
                 id: user.id,
                 username: user.username,
                 fullname: user.fullname,
+                skill: user.skill,
+                education:user.education,
+                facebook:user.facebook,
+                github:user.github,
+                x:user.x
             },
             200
         );
