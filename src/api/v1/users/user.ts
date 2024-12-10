@@ -21,5 +21,12 @@ app.post('/updatePortfolioDetail', async(c) => {
     return c.json({userID, portID, updated_detail},200)
 })
 
+app.post('/updatePortfolioPicture', async(c) => {
+    
+    const {userID, portID, updated_picture} = await c.req.json();
+  
+    return c.json({userID, portID, updated_picture},200)
+})
+
 
 export default app;
