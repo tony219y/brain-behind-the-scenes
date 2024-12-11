@@ -106,6 +106,8 @@ export const postOfferApply = pgTable("PostOfferApply", {
   id: serial("id").primaryKey(),
   user_id: integer("user_id").references(() => users.id), // Foreign Key to Users
   post_id: integer("post_id").references(() => posts.id), // Foreign Key to Posts
+  content: text("content"),
+  status: text("status"),
   action_type: varchar("action_type", { length: 50 }),
   attach_id: integer("attach_id").references(() => attachments.id), // Foreign Key to Attachments
   created_at: timestamp("created_at").defaultNow(),
