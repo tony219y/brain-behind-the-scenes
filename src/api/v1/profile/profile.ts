@@ -5,14 +5,6 @@ import { eq } from 'drizzle-orm';
 
 const app = new Hono();
 
-
-app.put('/profile', async (c) => {
-    const { name } = await c.req.json();
-    console.log(name + " from back");
-
-    return c.json({ message: name }, 200)
-})
-
 app.get('/:username', async (c) => {
     const username = c.req.param('username');
     const response = await db.select({
