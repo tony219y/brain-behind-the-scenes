@@ -9,7 +9,7 @@ const app = new Hono()
 
 app.route('/api/v1/auth',register)
 app.route('/api/v1/users',user)
-app.route('/api/v1/profile',profile)
+app.route('/api/v1/profiles',profile)
 app.route('/api/v1/posts',posts)
 
 app.get('/', (c) => {
