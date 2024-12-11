@@ -7,6 +7,8 @@ const app = new Hono();
 
 app.put('/edit', async (c) => {
     const {id ,fullname, skill, education, facebook, github, x } = await c.req.json();
+    
+    console.log({id ,fullname, skill, education, facebook, github, x })
 
     const EditProfile = await db.update(table.users).set({
         fullname: fullname, 
@@ -18,7 +20,7 @@ app.put('/edit', async (c) => {
         updated_at: new Date()
     }).where(eq(table.users.id, id))
 
-    console.log(EditProfile)
+    // console.log(EditProfile)
     return c.json({ 
         fullname: fullname, 
         skill:skill, 
