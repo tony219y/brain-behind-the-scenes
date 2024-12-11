@@ -14,7 +14,8 @@ app.put('/edit', async (c) => {
         education:education, 
         facebook:facebook,
         github:github,
-        x:x
+        x:x,
+        updated_at: new Date()
     }).where(eq(table.users.id, id))
 
     console.log(EditProfile)
