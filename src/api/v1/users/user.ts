@@ -34,18 +34,5 @@ app.get('/see-user', async (c)=>{
 
     return c.json({response})
 })
-app.put('/edit', async (c) => {
-    const { name, skill, education, facebook, github, x } = await c.req.json();
-    console.log(name + " from back");
-
-    return c.json({ 
-        name: name, 
-        skill:skill, 
-        education:education, 
-        facebook:facebook,
-        github:github,
-        x:x
-    }, 200)
-})
 
 export default app;

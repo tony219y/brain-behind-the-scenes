@@ -5,6 +5,29 @@ import { eq } from 'drizzle-orm';
 
 const app = new Hono();
 
+app.put('/edit', async (c) => {
+    const {id ,fullname, skill, education, facebook, github, x } = await c.req.json();
+
+    const EditProfile = await db.update(table.users).set({
+        fullname: fullname, 
+        skill: skill, 
+        education:education, 
+        facebook:facebook,
+        github:github,
+        x:x
+    }).where(eq(table.users.id, id))
+
+    console.log(EditProfile)
+    return c.json({ 
+        fullname: fullname, 
+        skill:skill, 
+        education:education, 
+        facebook:facebook,
+        github:github,
+        x:x
+    }, 200)
+})
+
 app.get('/:username', async (c) => {
     const username = c.req.param('username');
     const response = await db.select({
