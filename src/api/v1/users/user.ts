@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { db } from '$db'
-// import { usersTable } from '$schema'
+import * as table from '$schema'
 const app = new Hono()
 
 app.get('/', (c) => {
@@ -28,6 +28,12 @@ app.post('/updatePortfolioPicture', async(c) => {
     return c.json({userID, portID, updated_picture},200)
 })
 
+app.get('/see-user', async (c)=>{
+    console.log("Hello")
+    const response = await db.select().from(table.users)
+
+    return c.json({response})
+})
 app.put('/edit', async (c) => {
     const { name, skill, education, facebook, github, x } = await c.req.json();
     console.log(name + " from back");
