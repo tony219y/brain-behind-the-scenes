@@ -10,7 +10,6 @@ const app = new Hono();
 app.post('/create', async (c) => {
     const { user_id, title, content, post_type_id, post_tag_id, is_visible, like_count } = await c.req.json();
 
-    // return c.json("HELLO",200)
     try {
         const response = await db.insert(table.posts).values({
             user_id: user_id,
@@ -26,6 +25,7 @@ app.post('/create', async (c) => {
             return c.json({ message: "Post Created!" }, 201)
         }
     } catch (error) {
+        console.log(error)
         return c.json({ message: "Post Created Failed!" }, 400)
     }
 })
